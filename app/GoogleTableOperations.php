@@ -11,6 +11,7 @@ use Google\Spreadsheet\DefaultServiceRequest;
 use Google\Spreadsheet\ServiceRequestFactory;
 use Google\Spreadsheet\SpreadsheetService as SpreadsheetService;
 use Illuminate\Support\Facades\Auth;
+use Google\Spreadsheet\Exception\WorksheetNotFoundException;
 
 class GoogleTableOperations extends Model
 {
@@ -19,11 +20,14 @@ class GoogleTableOperations extends Model
     protected const ORDERS_TABLE_TITLE = 'orders';
     protected const COURIERS_TABLE_TITLE = 'couriers';
     protected $tableTitle = 'orders';
-    protected $couriersTableColumns = ['email', 'paypal', 'address', 'city', 'state', 'zip', 'phone 1', 'phone 2'];
-    protected $ordersTableColumns = ['courier name', 'content', 'quantity', 'price', 'tracking', 'holder', "", ""];
+    protected $couriersTableColumns =
+        ['name','email', 'paypal', 'address', 'city', 'state', 'zip', 'phone 1', 'phone 2'];
+    protected $ordersTableColumns =
+        ['courier name', 'content', 'quantity', 'price', 'tracking', 'holder', "", ""];
 
     protected $workSheetTitle;
     protected $workSheet;
+    protected $managerWorksheetCreated = false;
 
     protected $service;
     protected $client;
@@ -42,10 +46,10 @@ class GoogleTableOperations extends Model
 
     protected function newWorkSheet()
     {
-        //if ($this->getCurrentWorkSheet()->getTitle() == $this->workSheetTitle) {
-       /* if ($this->getCurrentWorkSheet()) {
+        try {
             $result = true;
-        } else {*/
+            $this->getCurrentWorkSheet();
+        } catch (WorksheetNotFoundException $e) {
             $body = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest(array(
                 'requests' => array('addSheet' => array('properties' => array('title' => $this->workSheetTitle)))
             ));
@@ -53,11 +57,12 @@ class GoogleTableOperations extends Model
             $spreadsheetId = $currentGoogleTable['spreadSheetId'];
 
             $result = $this->service->spreadsheets->batchUpdate($spreadsheetId, $body);
-        //}
 
-        $this->workSheet = $this->getCurrentWorkSheet();
+            $this->workSheet = $this->getCurrentWorkSheet();
 
-        return $result;
+        } finally {
+            return $result;
+        }
     }
 
     protected function deleteWorkSheet()
@@ -79,14 +84,14 @@ class GoogleTableOperations extends Model
         ServiceRequestFactory::setInstance($serviceRequest);
         $spreadsheetService = new SpreadsheetService();
         $spreadsheetFeed = $spreadsheetService->getSpreadsheetFeed();
-        
+
         $currentGoogleTable = $this->getGoogleTable();
-        $tableTitle= strval($currentGoogleTable['tableTitle']);
+        $tableTitle = strval($currentGoogleTable['tableTitle']);
         $spreadsheet = $spreadsheetFeed->getByTitle($tableTitle);
-        //$spreadsheet = $spreadsheetFeed->getByTitle($tableTitle)->getId();
 
         $worksheetFeed = $spreadsheet->getWorksheetFeed();
         return $worksheetFeed->getByTitle($this->workSheetTitle);
+
     }
 
     protected function setTableHead($columnNames)
@@ -113,27 +118,27 @@ class GoogleTableOperations extends Model
     {
         $referer = request()->headers->get('referer');
 
-        if (strpos($referer, '/table/couriers') == true) {
+        if (strpos($referer, 'couriers') == true) {
             return [
                 'name' => 'Курьеры',
                 'columns' => $this->couriersTableColumns,
                 'tableTitle' => self::COURIERS_TABLE_TITLE,
-                'spreadSheetId' => self::COURIERS_SPREADSHEET_ID];
-
-
+                'spreadSheetId' => self::COURIERS_SPREADSHEET_ID
+            ];
         }
 
-        if (strpos($referer, '/table/orders') == true) {
-            return ['name' => 'Заказы',
+        if (strpos($referer, 'orders') == true) {
+            return [
+                'name' => 'Заказы',
                 'columns' => array_diff($this->ordersTableColumns, ['']),
                 'tableTitle' => self::ORDERS_TABLE_TITLE,
-                'spreadSheetId' => self::ORDERS_SPREADSHEET_ID];
+                'spreadSheetId' => self::ORDERS_SPREADSHEET_ID
+            ];
         }
-
         return false;
     }
 
-    protected function validateDataSize($columns)
+    protected function getValidatedData($columns)
     {
         $data = $this->getCurrentWorkSheet()->getCellFeed()->toArray();
 

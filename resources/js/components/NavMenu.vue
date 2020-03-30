@@ -1,20 +1,26 @@
 <template>
     <nav class="nav">
+
         <div id="container" class="button-wrapp">
-            <a class="button" id="readData"
-               @click.prevent="readData()"
-            >загрузить</a>
+            <router-link class="button" id="readData"
+                         :to="{ name: 'couriers-form'}"
+
+            >загрузить</router-link>
+            <!--<a class="button" id="readData"
+                         @click.prevent="readData()"
+
+            >загрузить</a>-->
         </div>
         <ul class="nav_list">
             <li class="nav_list-item nav_list-item-active"
                 @click.prevent="changePage()"
                 id="couriers-table">
-                <router-link :to="{ name: 'couriers-table'}">добавить курьеров</router-link>
+                <router-link :to="{ name: 'couriers-table'}" tag="a">добавить курьеров</router-link>
             </li>
             <li class="nav_list-item"
                 @click.prevent="changePage()"
                 id="orders-table">
-                <router-link :to="{ name: 'orders-table'}">добавить заказы</router-link>
+                <router-link :to="{ name: 'orders-table'}" tag="a">добавить заказы</router-link>
             </li>
             <li class="nav_list-item" id="help"><a href="">помощь</a></li>
             <li class="nav_list-item">
@@ -30,6 +36,7 @@
 </template>
 
 <script>
+    import {eventBus} from '../app';
     export default {
         mounted() {
             this.changePage();
@@ -39,19 +46,31 @@
                 this.updateComponentData();
                 this.changeNavActiveLi();
 
+
                 let apiRoute = this.apiRoutes[this.$route.name];
 
-                axios.get(apiRoute).then((response) => {
-                    console.log(response);
-                })
+                if(apiRoute){
+                    axios.get(apiRoute).then((response) => {
+                        //console.log(response);
+                    })
+                }
             },
 
             readData: function () {
 
                 axios.get('/api/table/read').then((response) => {
-                    this.googleTableData = response.data;
-                    console.log(this.googleTableData);
+                    //this.googleTableData = response.data;
+                    //this.$emit('clicked', response.data);
+                    //this.$root.$emit('clicked', response.data);
+                    //this.$root.$emit('update');
+                    //eventBus.$emit('googleTableData', response.data);
                     //console.log(response);
+                    this.$router.push('/form/couriers');
+                    eventBus.$emit('googleTableData', response.data);
+
+
+
+
                 })
             },
 
@@ -64,7 +83,7 @@
             updateComponentData() {
                     this.currentRoute = this.$route.name;
                     this.activeItem = document.querySelector('.nav_list-item-active');
-                    this.currentPage = document.getElementById(this.currentRoute);
+                    this.currentPage = document.getElementById(this.liIds[this.currentRoute]);
                     this.readDataButton = document.getElementById('readData');
             },
 
@@ -78,16 +97,28 @@
                 readDataButton: "",
                 buttonTexts: {
                     'orders-table': 'Считать заказы',
-                    'couriers-table': 'Считать курьеров'
+                    'orders-form': 'Добавить заказы',
+                    'couriers-table': 'Считать курьеров',
+                    'couriers-form': 'Добавить курьеров',
                 },
                 apiRoutes: {
                     'orders-table': '/api/table/orders',
-                    'couriers-table': '/api/table/couriers'
+                    'couriers-table': '/api/table/couriers',
+                },
+                liIds: {
+                    'orders-table': 'orders-table',
+                    'orders-form': 'orders-table',
+                    'couriers-table': 'couriers-table',
+                    'couriers-form': 'couriers-table',
                 },
                 csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
 
                 googleTableData: "",
             }
-        }
+        },
+
+        props: [
+            'currentRouteName',
+        ],
     }
 </script>

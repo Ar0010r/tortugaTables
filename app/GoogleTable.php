@@ -6,18 +6,14 @@ class GoogleTable extends GoogleTableOperations
 {
     public function couriersTable()
     {
-        /*$this->newWorkSheet();
-        $this->setTableHead($this->couriersTableColumns);*/
-        //return $this->newWorkSheet();
-        return $this->newWorkSheet();
+        $this->newWorkSheet();
+        $this->setTableHead($this->couriersTableColumns);
     }
 
     public function ordersTable()
     {
-       //return $this->newWorkSheet();
-        return $this->getCurrentWorkSheet();
-       /* $this->newWorkSheet();
-        $this->setTableHead($this->ordersTableColumns);*/
+        $this->newWorkSheet();
+        $this->setTableHead($this->ordersTableColumns);
     }
 
     public function readData()
@@ -26,7 +22,7 @@ class GoogleTable extends GoogleTableOperations
         $name = $googleTable['name'];
         $columns = $googleTable['columns'];
 
-        $data = $this->validateDataSize($columns);
+        $data = $this->getValidatedData($columns);
 
         if ($data) {
             return $this->removeTableHead($data, $columns);

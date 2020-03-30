@@ -10,11 +10,9 @@
     export default {
         mounted() {
             console.log('Component App mounted.');
-
-            console.log()
         },
         components: {
             NavMenu,
-        }
+        },
     }
 </script>
