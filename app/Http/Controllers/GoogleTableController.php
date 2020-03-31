@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\GoogleTable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class GoogleTableController extends Controller
 {

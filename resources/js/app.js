@@ -7,8 +7,10 @@ import VueAxios from 'vue-axios' ;
 import App from './components/App'
 import GoogleTable from './components/GoogleTable'
 import NavMenu from './components/NavMenu'
-import Form from './components/Form'
-import CouriersFormRow from './components/CouriersFormRow'
+import Form from './components/form/Form'
+import CouriersFormRow from './components/form/CouriersFormRow'
+import OrdersFormRow from './components/form/OrdersFormRow'
+import DeleteButton from './components/form/DeleteButton'
 
 
 require('./bootstrap');
@@ -26,7 +28,9 @@ const app = new Vue({
         GoogleTable : GoogleTable,
         NavMenu: NavMenu,
         Form: Form,
-        CouriersFormRow: CouriersFormRow
+        CouriersFormRow: CouriersFormRow,
+        OrdersFormRow: OrdersFormRow,
+        DeleteButton: DeleteButton
     },
     router
 });
