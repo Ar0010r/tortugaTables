@@ -1999,7 +1999,22 @@ __webpack_require__.r(__webpack_exports__);
     changePage: function changePage() {
       this.updateComponentData();
       this.changeNavActiveLi();
-      var apiRoute = this.apiRoutes[this.$route.name];
+      this.setGoogleTable();
+    },
+    changeNavActiveLi: function changeNavActiveLi() {
+      this.activeItem.classList.remove('nav_list-item-active');
+      this.currentPage.classList.add('nav_list-item-active');
+      this.navButton.textContent = this.buttonTexts[this.$route.name];
+    },
+    updateComponentData: function updateComponentData() {
+      this.currentRoute = this.$route.name;
+      this.activeItem = document.querySelector('.nav_list-item-active');
+      this.currentPage = document.getElementById(this.liIds[this.currentRoute]);
+      this.navButton = document.getElementById('navButton');
+      this.navButtonDirection = this.buttonDirections[this.currentRoute];
+    },
+    setGoogleTable: function setGoogleTable() {
+      var apiRoute = this.apiTableRoutes[this.$route.name];
 
       if (apiRoute) {
         axios.get(apiRoute).then(function (response) {
@@ -2007,17 +2022,23 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
-    changeNavActiveLi: function changeNavActiveLi() {
-      this.activeItem.classList.remove('nav_list-item-active');
-      this.currentPage.classList.add('nav_list-item-active');
-      this.readDataButton.textContent = this.buttonTexts[this.$route.name];
+    navButtonFunction: function navButtonFunction() {
+      if (this.$route.name === 'orders-table' || this.$route.name === 'couriers-table') {
+        this.changePage();
+      } else if (this.$route.name === 'orders-form' || this.$route.name === 'couriers-form') {
+        this.storeData();
+      }
     },
-    updateComponentData: function updateComponentData() {
-      this.currentRoute = this.$route.name;
-      this.activeItem = document.querySelector('.nav_list-item-active');
-      this.currentPage = document.getElementById(this.liIds[this.currentRoute]);
-      this.readDataButton = document.getElementById('readData');
-      this.readDataButtonDirection = this.buttonDirections[this.currentRoute];
+    storeData: function storeData() {
+      var apiRoute = this.apiStoreRoutes[this.$route.name];
+
+      if (apiRoute) {
+        axios.post(apiRoute, $('#form').serialize()).then(function (response) {
+          console.log(response);
+        })["catch"](function (e) {
+          that.errors = e;
+        });
+      }
     }
   },
   data: function data() {
@@ -2025,17 +2046,21 @@ __webpack_require__.r(__webpack_exports__);
       currentRoute: "",
       activeItem: "",
       currentPage: "",
-      readDataButton: "",
-      readDataButtonDirection: "",
+      navButton: "",
+      navButtonDirection: "",
       buttonTexts: {
         'orders-table': 'Считать заказы',
         'orders-form': 'Добавить заказы',
         'couriers-table': 'Считать курьеров',
         'couriers-form': 'Добавить курьеров'
       },
-      apiRoutes: {
+      apiTableRoutes: {
         'orders-table': '/api/table/orders',
         'couriers-table': '/api/table/couriers'
+      },
+      apiStoreRoutes: {
+        'orders-form': '/api/orders/store',
+        'couriers-form': '/api/couriers/store'
       },
       liIds: {
         'orders-table': 'orders-table',
@@ -2254,7 +2279,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    document.getElementById('submit').classList.add('form_table-orders');
+    document.getElementById('form').classList.add('form_table-orders');
   },
   props: ['dataRow', 'index'],
   components: {
@@ -37712,7 +37737,7 @@ var render = function() {
         on: {
           click: function($event) {
             $event.preventDefault()
-            return _vm.changePage()
+            return _vm.navButtonFunction()
           }
         }
       },
@@ -37721,7 +37746,7 @@ var render = function() {
           "router-link",
           {
             staticClass: "button",
-            attrs: { id: "readData", to: { name: _vm.readDataButtonDirection } }
+            attrs: { id: "navButton", to: { name: _vm.navButtonDirection } }
           },
           [_vm._v("загрузить")]
         )
@@ -37853,7 +37878,7 @@ var render = function() {
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-paypal",
-            attrs: { type: "text", name: ["paypal" + this.index] },
+            attrs: { type: "text", name: ["paypal_email" + this.index] },
             domProps: { value: _vm.dataRow[3] }
           }),
           _vm._v(" "),
@@ -37885,13 +37910,13 @@ var render = function() {
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-phone1",
-            attrs: { type: "text", name: ["phone1" + this.index] },
+            attrs: { type: "text", name: ["phone_1" + this.index] },
             domProps: { value: _vm.dataRow[8] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-phone2",
-            attrs: { type: "text", name: ["phone2" + this.index] },
+            attrs: { type: "text", name: ["phone_2" + this.index] },
             domProps: { value: _vm.dataRow[9] }
           })
         ]),
@@ -37971,7 +37996,7 @@ var render = function() {
   return _c("div", { staticClass: "form-wrap" }, [
     _c(
       "form",
-      { staticClass: "form_table", attrs: { id: "submit" } },
+      { staticClass: "form_table", attrs: { id: "form" } },
       _vm._l(_vm.googleTableData, function(dataRow, index) {
         return _c(_vm.currentFormRow, {
           key: index,
@@ -38036,12 +38061,25 @@ var render = function() {
               domProps: { value: _vm.dataRow[4] }
             }),
             _vm._v(" "),
-            _vm._m(0)
+            _c(
+              "select",
+              {
+                staticClass: "form_input form_input-condition",
+                attrs: { name: ["condition" + _vm.index] }
+              },
+              [
+                _c("option", { attrs: { value: "0" } }, [_vm._v("new")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "1" } }, [_vm._v("ref")]),
+                _vm._v(" "),
+                _c("option", { attrs: { value: "2" } }, [_vm._v("used")])
+              ]
+            )
           ]),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-tracking",
-            attrs: { type: "text", name: ["tracking" + _vm.index] },
+            attrs: { type: "text", name: ["tracking_number" + _vm.index] },
             domProps: { value: _vm.dataRow[5] }
           }),
           _vm._v(" "),
@@ -38071,20 +38109,7 @@ var render = function() {
     _c("div", { staticClass: "form_table-errors" })
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("select", { staticClass: "form_input form_input-condition" }, [
-      _c("option", { attrs: { value: "new" } }, [_vm._v("new")]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "ref" } }, [_vm._v("ref")]),
-      _vm._v(" "),
-      _c("option", { attrs: { value: "used" } }, [_vm._v("used")])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

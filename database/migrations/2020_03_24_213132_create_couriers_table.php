@@ -16,8 +16,9 @@ class CreateCouriersTable extends Migration
         Schema::create('couriers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('manager_id');
+            $table->string('name');
             $table->string('email');
-            $table->smallInteger('payment_method');
+            $table->smallInteger('payment_method')->default(0);
             $table->string('paypal_email');
             $table->string('address');
             $table->string('city');
@@ -25,7 +26,7 @@ class CreateCouriersTable extends Migration
             $table->string('zip');
             $table->string('phone_1');
             $table->string('phone_2');
-            $table->smallInteger('race');
+            $table->smallInteger('race')->default(0);
             $table->timestamps();
 
             $table->foreign('manager_id')->references('id')->on('managers');

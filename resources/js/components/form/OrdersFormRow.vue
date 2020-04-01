@@ -7,13 +7,13 @@
                 <div class="form_table-div">
                     <input type="text" :value="dataRow[3]" class="form_input form_input-quantity" :name="['quantity'+index]">
                     <input type="text" :value="dataRow[4]" class="form_input form_input-price" :name="['price'+index]">
-                    <select class="form_input form_input-condition">
-                        <option value="new">new</option>
-                        <option value="ref">ref</option>
-                        <option value="used">used</option>
+                    <select class="form_input form_input-condition" :name="['condition'+index]">
+                        <option value="0">new</option>
+                        <option value="1">ref</option>
+                        <option value="2">used</option>
                     </select>
                 </div>
-                <input type="text" :value="dataRow[5]" class="form_input form_input-tracking" :name="['tracking'+index]">
+                <input type="text" :value="dataRow[5]" class="form_input form_input-tracking" :name="['tracking_number'+index]">
                 <div class="form_table-div-2">
                     <input type="text" :value="dataRow[6]" class="form_input form_input-holder" :name="['holder'+index]">
                     <input type="text" placeholder="enter shop (optional)" class="form_input form_input-shop" :name="['shop'+index]">
@@ -35,7 +35,7 @@
     export default {
         mounted() {
 
-            document.getElementById('submit').classList.add('form_table-orders')
+            document.getElementById('form').classList.add('form_table-orders')
 
         },
 

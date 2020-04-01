@@ -4,15 +4,15 @@
             <div class="form_table-data">
                 <input type="text" :value="dataRow[1]" class="form_input form_input-name" :name="['name'+ this.index]">
                 <input type="text" :value="dataRow[2]" class=" form_input form_input-email" :name="['email'+ this.index]">
-                <input type="text" :value="dataRow[3]" class="form_input form_input-paypal" :name="['paypal'+ this.index]">
+                <input type="text" :value="dataRow[3]" class="form_input form_input-paypal" :name="['paypal_email'+ this.index]">
                 <input type="text" :value="dataRow[4]" class="form_input form_input-address" :name="['address'+ this.index]">
                 <div class="form_table-div">
                     <input type="text" :value="dataRow[5]" class="form_input form_input-city" :name="['city'+ this.index]">
                     <input type="text" :value="dataRow[6]" class="form_input form_input-state" :name="['state'+ this.index]">
                     <input type="text" :value="dataRow[7]" class="form_input form_input-zip" :name="['zip'+ this.index]">
                 </div>
-                <input type="text" :value="dataRow[8]" class="form_input form_input-phone1" :name="['phone1'+ this.index]">
-                <input type="text" :value="dataRow[9]" class="form_input form_input-phone2" :name="['phone2'+ this.index]">
+                <input type="text" :value="dataRow[8]" class="form_input form_input-phone1" :name="['phone_1'+ this.index]">
+                <input type="text" :value="dataRow[9]" class="form_input form_input-phone2" :name="['phone_2'+ this.index]">
             </div>
             <delete-button :index="index"></delete-button>
         </div>

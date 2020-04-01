@@ -1,6 +1,6 @@
 <template>
     <div class="form-wrap">
-        <form class="form_table" id="submit">
+        <form class="form_table" id="form">
             <component :is = 'currentFormRow'
                        v-for="(dataRow, index) in googleTableData"
                        :dataRow = "dataRow"

@@ -12,10 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
 Route::group(['middleware' => 'web'], function () {
 
     Auth::routes();
@@ -23,9 +19,9 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('api/table/couriers', 'GoogleTableController@couriersTable');
     Route::get('api/table/orders', 'GoogleTableController@ordersTable');
     Route::get('api/table/read', 'GoogleTableController@readData');
+    Route::post('api/couriers/store', 'AppController@storeCouriers');
+    Route::post('api/orders/store', 'AppController@storeOrders');
 
-    Route::get('{vue_capture?}', 'AppController@index')->where('vue_capture', '^(?!storage).*$')
-        ->middleware('auth')
-    ;
+    Route::get('{vue_capture?}', 'AppController@index')->where('vue_capture', '^(?!storage).*$')->middleware('auth');
 
 });
