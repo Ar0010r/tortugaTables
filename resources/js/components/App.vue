@@ -6,7 +6,7 @@
 </template>
 
 <script>
-    import NavMenu from './NavMenu';
+    import NavMenu from './navMenu/NavMenu';
     export default {
         mounted() {
             console.log('Component App mounted.');
