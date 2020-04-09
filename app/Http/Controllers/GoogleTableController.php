@@ -6,16 +6,10 @@ use App\GoogleTable;
 
 class GoogleTableController extends Controller
 {
-    public function ordersTable()
+    public function showTable()
     {
         request()->headers->set('accept', 'application/json');
-        return GoogleTable::init()->ordersTable();
-    }
-
-    public function couriersTable()
-    {
-        request()->headers->set('accept', 'application/json');
-        return GoogleTable::init()->couriersTable();
+        return GoogleTable::init()->showTable();
     }
 
     public function readData()

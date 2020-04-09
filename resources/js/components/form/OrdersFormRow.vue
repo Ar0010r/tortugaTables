@@ -2,21 +2,21 @@
     <div class="form_table-row">
         <div class="form_table-inputs">
             <div class="form_table-data">
-                <input type="text" :value="dataRow[1]" class=" form_input form_input-name" :name="['name'+index]">
-                <input type="text" :value="dataRow[2]" class="form_input form_input-content" :name="['content'+index]">
+                <input type="text" :value="dataRow[1]" class="form_input form_input-name" :name="name">
+                <input type="text" :value="dataRow[2]" class="form_input form_input-content" :name="content">
                 <div class="form_table-div">
-                    <input type="text" :value="dataRow[3]" class="form_input form_input-quantity" :name="['quantity'+index]">
-                    <input type="text" :value="dataRow[4]" class="form_input form_input-price" :name="['price'+index]">
-                    <select class="form_input form_input-condition" :name="['condition'+index]">
+                    <input type="text" :value="dataRow[3]" class="form_input form_input-quantity" :name="quantity">
+                    <input type="text" :value="dataRow[4]" class="form_input form_input-price" :name="price">
+                    <select class="form_input form_input-condition" :name="condition">
                         <option value="0">new</option>
                         <option value="1">ref</option>
                         <option value="2">used</option>
                     </select>
                 </div>
-                <input type="text" :value="dataRow[5]" class="form_input form_input-tracking" :name="['tracking_number'+index]">
+                <input type="text" :value="dataRow[5]" class="form_input form_input-tracking" :name="tracking_number">
                 <div class="form_table-div-2">
-                    <input type="text" :value="dataRow[6]" class="form_input form_input-holder" :name="['holder'+index]">
-                    <input type="text" placeholder="enter shop (optional)" class="form_input form_input-shop" :name="['shop'+index]">
+                    <input type="text" :value="dataRow[6]" class="form_input form_input-holder" :name="holder">
+                    <input type="text" placeholder="enter shop (optional)" class="form_input form_input-shop" :name="shop">
                 </div>
             </div>
             <delete-button :index="index"></delete-button>
@@ -34,15 +34,24 @@
     import DeleteButton from './DeleteButton';
     export default {
         mounted() {
-
             document.getElementById('form').classList.add('form_table-orders')
-
         },
 
         props: ['dataRow', 'index'],
 
-        components: {DeleteButton}
+        components: {DeleteButton},
 
-
+         data: () => {
+            return {
+                name : 'orders['+index+'][name]',
+                content : 'orders['+index+'][content]',
+                quantity : 'orders['+index+'][quantity]',
+                price : 'orders['+index+'][price]',
+                condition : 'orders['+index+'][condition]',
+                tracking_number : 'orders['+index+'][tracking_number]',
+                holder : 'orders['+index+'][holder]',
+                shop : 'orders['+index+'][shop]',
+            }
+         }
     }
 </script>

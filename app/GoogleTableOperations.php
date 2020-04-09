@@ -3,6 +3,8 @@
 namespace App;
 
 use Google\Spreadsheet\Batch\BatchRequest;
+use Google\Spreadsheet\Exception\SpreadsheetNotFoundException;
+use Google\Spreadsheet\Worksheet;
 use Google_Service_Sheets_BatchUpdateSpreadsheetRequest;
 use Google_Service_Sheets_ClearValuesRequest;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +23,7 @@ class GoogleTableOperations extends Model
     protected const COURIERS_TABLE_TITLE = 'couriers';
     protected $tableTitle = 'orders';
     protected $couriersTableColumns =
-        ['name','email', 'paypal', 'address', 'city', 'state', 'zip', 'phone 1', 'phone 2'];
+        ['name', 'email', 'paypal', 'address', 'city', 'state', 'zip', 'phone 1', 'phone 2'];
     protected $ordersTableColumns =
         ['courier name', 'content', 'quantity', 'price', 'tracking', 'holder', "", ""];
 
@@ -44,24 +46,17 @@ class GoogleTableOperations extends Model
         $this->workSheetTitle = Auth::user()->login;
     }
 
-    protected function newWorkSheet()
+    protected function newWorkSheet(): bool
     {
         try {
-            $result = true;
             $this->getCurrentWorkSheet();
+            return true;
         } catch (WorksheetNotFoundException $e) {
-            $body = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest(array(
-                'requests' => array('addSheet' => array('properties' => array('title' => $this->workSheetTitle)))
-            ));
-            $currentGoogleTable = $this->getGoogleTable();
-            $spreadsheetId = $currentGoogleTable['spreadSheetId'];
-
-            $result = $this->service->spreadsheets->batchUpdate($spreadsheetId, $body);
-
+            $this->createNewWorkSheet();
             $this->workSheet = $this->getCurrentWorkSheet();
-
-        } finally {
-            return $result;
+            return true;
+        } catch (SpreadsheetNotFoundException $e) {
+            throw new \Exception('таблица не найдена');
         }
     }
 
@@ -77,21 +72,23 @@ class GoogleTableOperations extends Model
      * @throws \Google\Spreadsheet\Exception\SpreadsheetNotFoundException
      * @throws \Google\Spreadsheet\Exception\WorksheetNotFoundException
      */
-    protected function getCurrentWorkSheet()
+    protected function getCurrentWorkSheet(): Worksheet
     {
+        //находим список всех таблиц таблицы
         $accessToken = $this->client->fetchAccessTokenWithAssertion()["access_token"];
         $serviceRequest = new DefaultServiceRequest($accessToken);
         ServiceRequestFactory::setInstance($serviceRequest);
         $spreadsheetService = new SpreadsheetService();
         $spreadsheetFeed = $spreadsheetService->getSpreadsheetFeed();
 
+        //выбираем нужную
         $currentGoogleTable = $this->getGoogleTable();
         $tableTitle = strval($currentGoogleTable['tableTitle']);
         $spreadsheet = $spreadsheetFeed->getByTitle($tableTitle);
 
+        //выбираем из этой таблицы лист соответствующий имени менеджера
         $worksheetFeed = $spreadsheet->getWorksheetFeed();
         return $worksheetFeed->getByTitle($this->workSheetTitle);
-
     }
 
     protected function setTableHead($columnNames)
@@ -125,9 +122,7 @@ class GoogleTableOperations extends Model
                 'tableTitle' => self::COURIERS_TABLE_TITLE,
                 'spreadSheetId' => self::COURIERS_SPREADSHEET_ID
             ];
-        }
-
-        if (strpos($referer, 'orders') == true) {
+        } elseif (strpos($referer, 'orders') == true) {
             return [
                 'name' => 'Заказы',
                 'columns' => array_diff($this->ordersTableColumns, ['']),
@@ -135,23 +130,35 @@ class GoogleTableOperations extends Model
                 'spreadSheetId' => self::ORDERS_SPREADSHEET_ID
             ];
         }
-        return false;
+        throw new \Exception('таблица не найдена');
     }
 
-    protected function getValidatedData($columns)
+    protected function createNewWorkSheet()
+    {
+        $body = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest(array(
+            'requests' => array('addSheet' => array('properties' => array('title' => $this->workSheetTitle)))
+        ));
+        $currentGoogleTable = $this->getGoogleTable();
+        $spreadsheetId = $currentGoogleTable['spreadSheetId'];
+
+        $this->service->spreadsheets->batchUpdate($spreadsheetId, $body);
+    }
+
+    protected function getValidatedData(array $columns, string $name): array
     {
         $data = $this->getCurrentWorkSheet()->getCellFeed()->toArray();
 
         foreach ($data as $value) {
             if (count($value) > count($columns)) {
-                return false;
+                throw new \Exception('В строке таблицы ' . "'" . $name . "'"
+                    . ' должно быть ' . count($columns) . ' или меньше ячеек');
             }
         }
 
-        return $data;
+        return $this->removeTableHead($data, $columns);
     }
 
-    protected function removeTableHead($data, $columns)
+    protected function removeTableHead(array $data, array $columns): array
     {
         $diff = array_diff($data[1], $columns);
 
@@ -161,6 +168,4 @@ class GoogleTableOperations extends Model
         }
         return $data;
     }
-
-
 }

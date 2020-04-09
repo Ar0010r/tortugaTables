@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Requests\OrderStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -23,49 +24,51 @@ class Order extends Model
     protected const FOR_US_DIRECTION = 2;
     protected const FOR_SERVICE_DIRECTION = 3;
 
-    public static function store()
+    public static function store(OrderStoreRequest $request): \Illuminate\Http\Response
     {
-        $request = request()->all();
-        $formFields = (new Order())->fillable;
-        $ordersCount = count($request) / count($formFields);
-        $data = self::prepareDataForInsert($ordersCount, $formFields);
-        return Order::insert($data);
-    }
-
-    private static function prepareDataForInsert(int $ordersCount, array $formFields)
-    {
-        $data = [];
-        for ($i = 0; $i < $ordersCount; $i++) {
-            foreach ($formFields as $key => $fieldName) {
-                $data[$i][$fieldName] = $request[$fieldName . $i] ?? "";
-            };
-
-            $courierName = $request['name' . $i] ?? "";
-
-            $courierId = self::getCourierId($courierName);
-
-            if ($courierId) {
-                $data[$i]['courier_id'] = $courierId;
-                $data[$i]['direction'] = self::TEST_DIRECTION;
-            } else {
-                return 'Есть несколько курьеров с именем ' . $courierName .
-                    'пожалуйста удалите строку с этим заказом и добавьте его с админки';
-            }
+        try {
+            $request = $request->all();
+            $orders = $request['orders'] ?? [];
+            $data = self::prepareDataForInsert($orders);
+            $result = Order::insert($data);
+            return response($result);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
         }
-
-        return $data;
     }
 
-    private static function getCourierId(string $courierName)
+    private static function prepareDataForInsert(array $orders): array
+    {
+        try {
+            if (count($orders) > 0) {
+                $data = [];
+                foreach ($orders as $key => $order) {
+                    $courierName = $order['name'];
+                    $courierId = self::getCourierId($courierName);
+
+                    $order['courier_id'] = $courierId;
+                    $order['direction'] = self::TEST_DIRECTION;
+
+                    unset($order['name']);
+
+                    $data[$key] = $order;
+                }
+                return $data;
+            }
+            throw new \Exception('Массив с данными о заказах пуст');
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    private static function getCourierId(string $courierName): int
     {
         $couriersIds = Courier::where('name', $courierName)->get('id');
-
-        if (count($couriersIds) === 1) {
-            $courierId = $couriersIds->pluck('id')[0];
+        $courierId = $couriersIds->pluck('id')[0];
+        if (is_int($courierId)) {
             return $courierId;
-        } else {
-            return false;
         }
+        throw new \Exception('некак считать айди курьера');
     }
 
     public function courier()

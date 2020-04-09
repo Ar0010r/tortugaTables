@@ -16,8 +16,8 @@ Route::group(['middleware' => 'web'], function () {
 
     Auth::routes();
 
-    Route::get('api/table/couriers', 'GoogleTableController@couriersTable');
-    Route::get('api/table/orders', 'GoogleTableController@ordersTable');
+    Route::get('api/table/couriers', 'GoogleTableController@showTable');
+    Route::get('api/table/orders', 'GoogleTableController@showTable');
     Route::get('api/table/read', 'GoogleTableController@readData');
     Route::post('api/couriers/store', 'AppController@storeCouriers');
     Route::post('api/orders/store', 'AppController@storeOrders');

@@ -2068,16 +2068,12 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    var _this = this;
+
     console.log('componenent form mounted');
     this.currentFormRow = this.formRows[this.$route.name];
     this.readData();
-  },
-  created: function created() {
-    var _this = this;
-
     _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$on('deleteRow', function (data) {
-      console.log(data);
-
       _this.deleteRow(data);
     });
   },
@@ -2100,7 +2096,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       axios.get('/api/table/read').then(function (response) {
+        //console.log(response);
         _this2.googleTableData = Object.values(response.data);
+      })["catch"](function (error) {
+        _this2.$router.go(-1);
+
+        console.log(error.response);
       });
     },
     deleteRow: function deleteRow(index) {
@@ -2161,6 +2162,18 @@ __webpack_require__.r(__webpack_exports__);
   props: ['dataRow', 'index'],
   components: {
     DeleteButton: _DeleteButton__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      name: 'orders[' + index + '][name]',
+      content: 'orders[' + index + '][content]',
+      quantity: 'orders[' + index + '][quantity]',
+      price: 'orders[' + index + '][price]',
+      condition: 'orders[' + index + '][condition]',
+      tracking_number: 'orders[' + index + '][tracking_number]',
+      holder: 'orders[' + index + '][holder]',
+      shop: 'orders[' + index + '][shop]'
+    };
   }
 });
 
@@ -2185,7 +2198,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2196,6 +2208,9 @@ __webpack_require__.r(__webpack_exports__);
     navButtonFunction: function navButtonFunction() {
       if (this.$route.name === 'orders-table' || this.$route.name === 'couriers-table') {
         this.updateButtonProperties();
+        this.$router.push({
+          name: this.navButtonDirection
+        });
       } else if (this.$route.name === 'orders-form' || this.$route.name === 'couriers-form') {
         this.storeData();
       }
@@ -2204,10 +2219,12 @@ __webpack_require__.r(__webpack_exports__);
       var apiRoute = this.apiStoreRoutes[this.$route.name];
 
       if (apiRoute) {
+        // axios.post(apiRoute, $('#form').serialize())
         axios.post(apiRoute, $('#form').serialize()).then(function (response) {
           console.log(response); //this.$router.push({ name: '/success', title: 'test title' })
         })["catch"](function (e) {
           that.errors = e;
+          console.log(e);
         });
       }
     },
@@ -2301,11 +2318,10 @@ __webpack_require__.r(__webpack_exports__);
       this.currentPage = document.getElementById(this.liIds[this.currentRoute]);
     },
     setGoogleTable: function setGoogleTable() {
-      var apiRoute = this.apiTableRoutes[this.$route.name];
+      var apiRoute = this.apiTableRoutes[this.currentRoute];
 
       if (apiRoute) {
-        axios.get(apiRoute).then(function (response) {
-          console.log(response);
+        axios.get(apiRoute).then(function (response) {//console.log(response);
         });
       }
     }
@@ -37782,57 +37798,75 @@ var render = function() {
         _c("div", { staticClass: "form_table-data" }, [
           _c("input", {
             staticClass: "form_input form_input-name",
-            attrs: { type: "text", name: ["name" + this.index] },
+            attrs: { type: "text", name: "couriers[" + _vm.index + "][name]" },
             domProps: { value: _vm.dataRow[1] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: " form_input form_input-email",
-            attrs: { type: "text", name: ["email" + this.index] },
+            attrs: { type: "text", name: "couriers[" + _vm.index + "][email]" },
             domProps: { value: _vm.dataRow[2] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-paypal",
-            attrs: { type: "text", name: ["paypal_email" + this.index] },
+            attrs: {
+              type: "text",
+              name: "couriers[" + _vm.index + "][paypal_email]"
+            },
             domProps: { value: _vm.dataRow[3] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-address",
-            attrs: { type: "text", name: ["address" + this.index] },
+            attrs: {
+              type: "text",
+              name: "couriers[" + _vm.index + "][address]"
+            },
             domProps: { value: _vm.dataRow[4] }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "form_table-div" }, [
             _c("input", {
               staticClass: "form_input form_input-city",
-              attrs: { type: "text", name: ["city" + this.index] },
+              attrs: {
+                type: "text",
+                name: "couriers[" + _vm.index + "][city]"
+              },
               domProps: { value: _vm.dataRow[5] }
             }),
             _vm._v(" "),
             _c("input", {
               staticClass: "form_input form_input-state",
-              attrs: { type: "text", name: ["state" + this.index] },
+              attrs: {
+                type: "text",
+                name: "couriers[" + _vm.index + "][state]"
+              },
               domProps: { value: _vm.dataRow[6] }
             }),
             _vm._v(" "),
             _c("input", {
               staticClass: "form_input form_input-zip",
-              attrs: { type: "text", name: ["zip" + this.index] },
+              attrs: { type: "text", name: "couriers[" + _vm.index + "][zip]" },
               domProps: { value: _vm.dataRow[7] }
             })
           ]),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-phone1",
-            attrs: { type: "text", name: ["phone_1" + this.index] },
+            attrs: {
+              type: "text",
+              name: "couriers[" + _vm.index + "][phone_1]"
+            },
             domProps: { value: _vm.dataRow[8] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-phone2",
-            attrs: { type: "text", name: ["phone_2" + this.index] },
+            attrs: {
+              type: "text",
+              name: "couriers[" + _vm.index + "][phone_2]"
+            },
             domProps: { value: _vm.dataRow[9] }
           })
         ]),
@@ -37953,27 +37987,27 @@ var render = function() {
       [
         _c("div", { staticClass: "form_table-data" }, [
           _c("input", {
-            staticClass: " form_input form_input-name",
-            attrs: { type: "text", name: ["name" + _vm.index] },
+            staticClass: "form_input form_input-name",
+            attrs: { type: "text", name: _vm.name },
             domProps: { value: _vm.dataRow[1] }
           }),
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-content",
-            attrs: { type: "text", name: ["content" + _vm.index] },
+            attrs: { type: "text", name: _vm.content },
             domProps: { value: _vm.dataRow[2] }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "form_table-div" }, [
             _c("input", {
               staticClass: "form_input form_input-quantity",
-              attrs: { type: "text", name: ["quantity" + _vm.index] },
+              attrs: { type: "text", name: _vm.quantity },
               domProps: { value: _vm.dataRow[3] }
             }),
             _vm._v(" "),
             _c("input", {
               staticClass: "form_input form_input-price",
-              attrs: { type: "text", name: ["price" + _vm.index] },
+              attrs: { type: "text", name: _vm.price },
               domProps: { value: _vm.dataRow[4] }
             }),
             _vm._v(" "),
@@ -37981,7 +38015,7 @@ var render = function() {
               "select",
               {
                 staticClass: "form_input form_input-condition",
-                attrs: { name: ["condition" + _vm.index] }
+                attrs: { name: _vm.condition }
               },
               [
                 _c("option", { attrs: { value: "0" } }, [_vm._v("new")]),
@@ -37995,14 +38029,14 @@ var render = function() {
           _vm._v(" "),
           _c("input", {
             staticClass: "form_input form_input-tracking",
-            attrs: { type: "text", name: ["tracking_number" + _vm.index] },
+            attrs: { type: "text", name: _vm.tracking_number },
             domProps: { value: _vm.dataRow[5] }
           }),
           _vm._v(" "),
           _c("div", { staticClass: "form_table-div-2" }, [
             _c("input", {
               staticClass: "form_input form_input-holder",
-              attrs: { type: "text", name: ["holder" + _vm.index] },
+              attrs: { type: "text", name: _vm.holder },
               domProps: { value: _vm.dataRow[6] }
             }),
             _vm._v(" "),
@@ -38011,7 +38045,7 @@ var render = function() {
               attrs: {
                 type: "text",
                 placeholder: "enter shop (optional)",
-                name: ["shop" + _vm.index]
+                name: _vm.shop
               }
             })
           ])
@@ -38052,10 +38086,10 @@ var render = function() {
     { staticClass: "button-wrapp", attrs: { id: "container" } },
     [
       _c(
-        "router-link",
+        "div",
         {
           staticClass: "button",
-          attrs: { id: "navButton", to: { name: _vm.navButtonDirection } },
+          attrs: { id: "navButton" },
           on: {
             click: function($event) {
               $event.preventDefault()
@@ -38065,8 +38099,7 @@ var render = function() {
         },
         [_vm._v(_vm._s(_vm.navButtonText) + "\n    ")]
       )
-    ],
-    1
+    ]
   )
 }
 var staticRenderFns = []

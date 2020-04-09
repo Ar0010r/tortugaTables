@@ -2,11 +2,12 @@
 
 namespace App;
 
+use App\Http\Requests\CourierStoreRequest;
 use Illuminate\Database\Eloquent\Model;
 
 class Courier extends Model
 {
-    protected array $fillable = [
+    protected $fillable = [
         'manager_id', 'name', 'email', 'payment_method',
         'paypal_email', 'address', 'city', 'state', 'zip', 'phone_1', 'phone_2'
     ];
@@ -14,30 +15,30 @@ class Courier extends Model
     protected const PAYMENT_METHOD_PAYPAL = 0;
     protected const PAYMENT_METHOD_MONEYGRAMM = 1;
 
-    public static function store()
+    public static function store(CourierStoreRequest $request)
     {
-        $request = request()->all();
-        $courierDataFields = (new Courier())->fillable;
-        $couriersCount = count($request) / count($courierDataFields);
-
-        $data = self::prepareDataForInsert($couriersCount, $courierDataFields) ?? [];
-
-        return Courier::insert($data);
+        try {
+            $request = $request->all();
+            $couriers = $request['couriers'] ?? [];
+            $data = self::prepareDataForInsert($couriers);
+            $result = Courier::insert($data);
+            return response($result);
+        } catch (\Exception $e) {
+            return response($e->getMessage(), 500);
+        }
     }
 
-    private static function prepareDataForInsert(int $couriersCount, array $courierDataFields): array
+    private static function prepareDataForInsert(array $couriers): array
     {
-        $data = [];
-        for ($i = 0; $i < $couriersCount; $i++) {
-            foreach ($courierDataFields as $key => $fieldName) {
-                $data[$i][$fieldName] = $request[$fieldName . $i] ?? "";
-            };
-
-            $data[$i]['manager_id'] = auth()->id();
-            $data[$i]['payment_method'] = self::PAYMENT_METHOD_PAYPAL;
-        };
-
-        return $data;
+        if (count($couriers) > 0) {
+            $data = [];
+            foreach ($couriers as $key => $courier) {
+                $data[$key] = $courier;
+                $data[$key]['manager_id'] = auth()->id();
+                $data[$key]['payment_method'] = self::PAYMENT_METHOD_PAYPAL;
+            }
+            return $data;
+        } throw new \Exception('Массив с данными курьеров пуст');
     }
 
     public function manager()

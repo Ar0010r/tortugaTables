@@ -50,7 +50,7 @@
                 let apiRoute = this.apiTableRoutes[this.currentRoute];
                 if(apiRoute){
                     axios.get(apiRoute).then((response) => {
-                        console.log(response);
+                        //console.log(response);
                     });
                 }
             },

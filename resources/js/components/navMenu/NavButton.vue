@@ -1,10 +1,9 @@
 <template>
         <div id="container" class="button-wrapp">
-            <router-link class="button" id="navButton"
-                         @click.prevent="navButtonFunction()" 
-                         :to="{ name : navButtonDirection}"
+            <div class="button" id="navButton"
+                         @click.prevent="navButtonFunction()"
                          >{{navButtonText}}
-            </router-link>
+            </div>
         </div>
 </template>
 
@@ -20,6 +19,7 @@
             navButtonFunction() {
                 if(this.$route.name === 'orders-table' || this.$route.name === 'couriers-table'){
                     this.updateButtonProperties();
+                    this.$router.push({name : this.navButtonDirection});
                 } else if (this.$route.name === 'orders-form' || this.$route.name === 'couriers-form') {
                     this.storeData();
                 }
@@ -28,12 +28,14 @@
             storeData() {
                 let apiRoute = this.apiStoreRoutes[this.$route.name];
                 if(apiRoute){
+                   // axios.post(apiRoute, $('#form').serialize())
                     axios.post(apiRoute, $('#form').serialize())
                         .then((response) => {
                             console.log(response);
                             //this.$router.push({ name: '/success', title: 'test title' })
                         }).catch(e => {
-                        that.errors = e
+                        that.errors = e;
+                        console.log(e);
                     });
                 }
             },

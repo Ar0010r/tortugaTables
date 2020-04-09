@@ -19,13 +19,13 @@ class CreateCouriersTable extends Migration
             $table->string('name');
             $table->string('email');
             $table->smallInteger('payment_method')->default(0);
-            $table->string('paypal_email');
+            $table->string('paypal_email')->nullable();
             $table->string('address');
             $table->string('city');
             $table->string('state');
             $table->string('zip');
             $table->string('phone_1');
-            $table->string('phone_2');
+            $table->string('phone_2')->nullable();
             $table->smallInteger('race')->default(0);
             $table->timestamps();
 

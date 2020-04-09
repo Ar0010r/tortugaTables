@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Courier;
 use App\GoogleTable;
+use App\Http\Requests\CourierStoreRequest;
+use App\Http\Requests\OrderStoreRequest;
 use App\Order;
 use Illuminate\Http\Request;
 
@@ -14,14 +16,15 @@ class AppController extends Controller
         return view('content');
     }
 
-    public function storeCouriers()
+    public function storeCouriers(CourierStoreRequest $request)
     {
-        return Courier::store();
+        return Courier::store($request);
     }
 
-    public function storeOrders()
+    public function storeOrders(OrderStoreRequest $request)
     {
-        return Order::store();
+        //return $request;
+        return Order::store($request);
     }
 
 }

@@ -19,11 +19,8 @@
             console.log('componenent form mounted');
             this.currentFormRow = this.formRows[this.$route.name];
             this.readData();
-        },
 
-        created() {
             eventBus.$on('deleteRow', data => {
-                console.log(data);
                 this.deleteRow(data);
             })
         },
@@ -47,7 +44,11 @@
         methods: {
             readData: function () {
                 axios.get('/api/table/read').then((response) => {
+                    //console.log(response);
                     this.googleTableData = Object.values(response.data);
+                }).catch(error => {
+                    this.$router.go(-1,);
+                    console.log(error.response);
                 });
             },
 
