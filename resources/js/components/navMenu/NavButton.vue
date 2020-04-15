@@ -28,15 +28,7 @@
             storeData() {
                 let apiRoute = this.apiStoreRoutes[this.$route.name];
                 if(apiRoute){
-                   // axios.post(apiRoute, $('#form').serialize())
-                    axios.post(apiRoute, $('#form').serialize())
-                        .then((response) => {
-                            console.log(response);
-                            //this.$router.push({ name: '/success', title: 'test title' })
-                        }).catch(e => {
-                        that.errors = e;
-                        console.log(e);
-                    });
+                    eventBus.$emit('storeData', apiRoute);
                 }
             },
 

@@ -22,8 +22,8 @@ class CreateOrdersTable extends Migration
             $table->integer('quantity');
             $table->integer('price');
             $table->string('shop')->nullable();
-            $table->integer('tracking_number');
-            $table->string('holder');
+            $table->integer('tracking_number')->nullable();
+            $table->string('holder')->nullable();
             $table->timestamps();
 
             $table->foreign('courier_id')->references('id')->on('couriers');

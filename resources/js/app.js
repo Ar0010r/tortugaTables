@@ -6,13 +6,15 @@ import VueAxios from 'vue-axios' ;
 
 import App from './components/App'
 import GoogleTable from './components/GoogleTable'
+import ModalWindow from './components/ModalWindow'
 import NavMenu from './components/navMenu/NavMenu'
 import NavButton from './components/navMenu/NavButton'
 import Form from './components/form/Form'
 import CouriersFormRow from './components/form/CouriersFormRow'
+import CouriersFormErrors from './components/form/CouriersFormErrors'
 import OrdersFormRow from './components/form/OrdersFormRow'
+import OrdersFormErrors from './components/form/OrdersFormErrors'
 import DeleteButton from './components/form/DeleteButton'
-
 
 require('./bootstrap');
 
@@ -27,11 +29,14 @@ const app = new Vue({
     components: {
         App : App,
         GoogleTable : GoogleTable,
+        ModalWindow : ModalWindow,
         NavMenu: NavMenu,
         NavButton: NavButton,
         Form: Form,
         CouriersFormRow: CouriersFormRow,
+        CouriersFormErrors: CouriersFormErrors,
         OrdersFormRow: OrdersFormRow,
+        OrdersFormErrors: OrdersFormErrors,
         DeleteButton: DeleteButton
     },
     router

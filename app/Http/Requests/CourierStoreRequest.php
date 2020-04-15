@@ -29,10 +29,8 @@ class CourierStoreRequest extends FormRequest
     {
         return [
             'couriers.*.name' => 'required|string',
-            'couriers.*.email' => 'required|email',
-            //'couriers.*.email' => 'required|email|unique:couriers,email|unique:couriers,paypal_email',
-            'couriers.*.paypal_email' => 'nullable|email',
-            //'couriers.*.paypal_email' => 'nullable|email|unique:couriers,email|unique:couriers,paypal_email',
+            'couriers.*.email' => 'required|email|unique:couriers,email|unique:couriers,paypal_email',
+            'couriers.*.paypal_email' => 'nullable|email|unique:couriers,email|unique:couriers,paypal_email',
             'couriers.*.city' => 'required|string',
             'couriers.*.state' => 'required|string|in:' . $this->states,
             'couriers.*.zip' => 'required|regex:/^\d{5}(-\d{4})?$/',

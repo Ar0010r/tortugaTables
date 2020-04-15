@@ -151,7 +151,7 @@ class GoogleTableOperations extends Model
         foreach ($data as $value) {
             if (count($value) > count($columns)) {
                 throw new \Exception('В строке таблицы ' . "'" . $name . "'"
-                    . ' должно быть ' . count($columns) . ' или меньше ячеек');
+                    . ' должно быть ' . count($columns) . ' или меньше ячеек ');
             }
         }
 

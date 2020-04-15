@@ -26,7 +26,7 @@ class CreateCouriersTable extends Migration
             $table->string('zip');
             $table->string('phone_1');
             $table->string('phone_2')->nullable();
-            $table->smallInteger('race')->default(0);
+            $table->smallInteger('race')->nullable();
             $table->timestamps();
 
             $table->foreign('manager_id')->references('id')->on('managers');

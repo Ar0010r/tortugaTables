@@ -15,7 +15,7 @@ class Courier extends Model
     protected const PAYMENT_METHOD_PAYPAL = 0;
     protected const PAYMENT_METHOD_MONEYGRAMM = 1;
 
-    public static function store(CourierStoreRequest $request)
+    public static function store(CourierStoreRequest $request): \Illuminate\Http\Response
     {
         try {
             $request = $request->all();
