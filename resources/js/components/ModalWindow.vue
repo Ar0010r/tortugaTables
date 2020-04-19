@@ -7,7 +7,10 @@
     <transition name="modal" appear>
         <div class="modal success-message_wrap" v-if="show">
             <div class="success-message">
-                <p class="success-message_text">{{message}}</p>
+                <div class="success-message_text">
+                    {{message}}
+                </div>
+
                 <div class="sucess-message_img-wrap">
                     <img  class="success-message-img" src="/images/success.png">
                 </div>
@@ -24,6 +27,8 @@
             console.log('Component ModalWindow mounted.');
             eventBus.$on('showModal', data => {
                 this.message = data || "";
+                document.getElementsByClassName('success-message_text').textContent = this.message;
+                console.log(this.message);
                 this.showModal();
             });
         },
@@ -60,15 +65,26 @@
 
     .modal {
         position: fixed;
-
         top: 20%;
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: white;
-
-
         min-height: 130px;
-
         z-index: 100;
+    }
+
+    .success-message_wrap {
+        height: fit-content;
+        max-width: 30%;
+    }
+
+    .success-message {
+        height: 100%;
+        width: 100%;
+    }
+
+    .sucess-message_img-wrap {
+        min-width: 50px;
+        min-height: 25px;
     }
 </style>

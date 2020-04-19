@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             $table->integer('quantity');
             $table->integer('price');
             $table->string('shop')->nullable();
-            $table->integer('tracking_number')->nullable();
+            $table->string('tracking_number')->nullable();
             $table->string('holder')->nullable();
             $table->timestamps();
 

@@ -1991,6 +1991,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -1999,6 +2002,8 @@ __webpack_require__.r(__webpack_exports__);
     console.log('Component ModalWindow mounted.');
     _app__WEBPACK_IMPORTED_MODULE_0__["eventBus"].$on('showModal', function (data) {
       _this.message = data || "";
+      document.getElementsByClassName('success-message_text').textContent = _this.message;
+      console.log(_this.message);
 
       _this.showModal();
     });
@@ -2032,6 +2037,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2153,11 +2166,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
+    this.formEmailsAndAddresses();
+  },
+  created: function created() {
     this.setComponentData();
   },
   props: ['dataRow', 'index'],
@@ -2174,13 +2191,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     email: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
-      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"]
+      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"],
+      uniqueValueInForm: function uniqueValueInForm(email) {
+        return this.formUniqueData.includes(email);
+      }
     },
     paypal: {
-      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"]
+      email: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["email"],
+      uniqueValueInForm: function uniqueValueInForm(paypal) {
+        return this.formUniqueData.includes(paypal);
+      }
     },
     address: {
-      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"]
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
+      uniqueValueInForm: function uniqueValueInForm(address) {
+        return this.formUniqueData.includes(address);
+      }
     },
     city: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
@@ -2196,8 +2222,8 @@ __webpack_require__.r(__webpack_exports__);
     },
     zip: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_2__["required"],
-      validZip: function validZip(state) {
-        return /^\d{5}(-\d{4})?$/.test(state);
+      validZip: function validZip(zip) {
+        return /^\d{5}(-\d{4})?$/.test(zip);
       }
     },
     tracking_number: {
@@ -2243,6 +2269,7 @@ __webpack_require__.r(__webpack_exports__);
       zip: '',
       phone_1: '',
       phone_2: '',
+      formUniqueData: [],
       states: ["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"]
     };
   },
@@ -2264,10 +2291,96 @@ __webpack_require__.r(__webpack_exports__);
       this.city = this.dataRow[5];
       this.state = this.dataRow[6];
       this.zip = this.dataRow[7];
-      this.phone_1 = this.dataRow[8]; //this.phone_2 = this.dataRow[9] || this.dataRow[8];
-
+      this.phone_1 = this.dataRow[8];
       this.phone_2 = this.dataRow[9] || "";
       this.$v.$touch();
+    },
+    formEmailsAndAddresses: function formEmailsAndAddresses() {
+      var emails = document.getElementsByClassName('form_input-email');
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = emails[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var item = _step.value;
+          this.formUniqueData.push(item.value);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      var paypals = document.getElementsByClassName('form_input-paypal');
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
+
+      try {
+        for (var _iterator2 = paypals[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var _item = _step2.value;
+          this.formUniqueData.push(_item.value);
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      var addresses = document.getElementsByClassName('form_input-address');
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
+
+      try {
+        for (var _iterator3 = addresses[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var _item2 = _step3.value;
+          this.formUniqueData.push(_item2.value);
+        }
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+            _iterator3["return"]();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
+      }
+
+      this.removeFromArray(this.email);
+      this.removeFromArray(this.paypal);
+      this.removeFromArray(this.address);
+    },
+    removeFromArray: function removeFromArray(email) {
+      var index = this.formUniqueData.indexOf(email);
+
+      if (index > -1) {
+        this.formUniqueData.splice(index, 1);
+      }
     }
   }
 });
@@ -2388,10 +2501,17 @@ __webpack_require__.r(__webpack_exports__);
     storeData: function storeData(apiRoute) {
       axios.post(apiRoute, $('#form').serialize()).then(function (response) {
         console.log(response); //this.$router.push({ name: '/success', title: 'test title' })
-      })["catch"](function (e) {
-        that.errors = e;
-        console.log(e);
-        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', e);
+      })["catch"](function (error) {
+        var data = error.response.data;
+        var errors = 'error';
+
+        if (data.errors) {
+          errors = Object.values(error.response.data.errors).join("\n");
+        } else if (data) {
+          errors = data;
+        }
+
+        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', errors);
       });
     }
   }
@@ -7325,7 +7445,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n\n\n    min-height: 130px;\n\n    z-index: 100;\n}\n", ""]);
+exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    height: -webkit-fit-content;\n    height: -moz-fit-content;\n    height: fit-content;\n    max-width: 30%;\n}\n.success-message {\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n", ""]);
 
 // exports
 
@@ -38889,8 +39009,12 @@ var render = function() {
         _vm.show
           ? _c("div", { staticClass: "modal success-message_wrap" }, [
               _c("div", { staticClass: "success-message" }, [
-                _c("p", { staticClass: "success-message_text" }, [
-                  _vm._v(_vm._s(_vm.message))
+                _c("div", { staticClass: "success-message_text" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.message) +
+                      "\n                "
+                  )
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "sucess-message_img-wrap" }, [
@@ -38957,9 +39081,27 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
+      _vm.v.email.$dirty && _vm.v.email.uniqueValueInForm
+        ? _c("label", { staticClass: "error-msg form_input-email-error" }, [
+            _vm._v("Курьер с таким имейлом уже есть в форме")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _vm.v.paypal.$dirty && !_vm.v.paypal.email
         ? _c("label", { staticClass: "error-msg form_input-paypal-error" }, [
             _vm._v("Введите правильный пейпал имейл")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.v.paypal.$dirty && !_vm.v.paypal.email
+        ? _c("label", { staticClass: "error-msg form_input-paypal-error" }, [
+            _vm._v("Введите правильный пейпал имейл")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.v.paypal.$dirty && _vm.v.paypal.uniqueValueInForm
+        ? _c("label", { staticClass: "error-msg form_input-email-error" }, [
+            _vm._v("Курьер с таким пейпал уже есть в форме")
           ])
         : _vm._e()
     ]),
@@ -38968,6 +39110,12 @@ var render = function() {
       _vm.v.address.$dirty && !_vm.v.address.required
         ? _c("label", { staticClass: "error-msg form_input-address-error" }, [
             _vm._v("Введите адрес")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.v.address.$dirty && _vm.v.address.uniqueValueInForm
+        ? _c("label", { staticClass: "error-msg form_input-email-error" }, [
+            _vm._v("Курьер с таким адресом уже есть в форме")
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -39100,7 +39248,8 @@ var render = function() {
               class: {
                 invalid:
                   (_vm.$v.email.$dirty && !_vm.$v.email.required) ||
-                  (_vm.$v.email.$dirty && !_vm.$v.email.email)
+                  (_vm.$v.email.$dirty && !_vm.$v.email.email) ||
+                  (_vm.$v.email.$dirty && _vm.$v.email.uniqueValueInForm)
               },
               attrs: { type: "text", name: _vm.inputNames.email },
               domProps: { value: _vm.email },
@@ -39124,7 +39273,11 @@ var render = function() {
                 }
               ],
               staticClass: "form_input form_input-paypal",
-              class: { invalid: _vm.$v.paypal.$dirty && !_vm.$v.paypal.email },
+              class: {
+                invalid:
+                  (_vm.$v.paypal.$dirty && !_vm.$v.paypal.email) ||
+                  (_vm.$v.paypal.$dirty && _vm.$v.paypal.uniqueValueInForm)
+              },
               attrs: { type: "text", name: _vm.inputNames.paypal },
               domProps: { value: _vm.paypal },
               on: {
@@ -39148,7 +39301,9 @@ var render = function() {
               ],
               staticClass: "form_input form_input-address",
               class: {
-                invalid: _vm.$v.address.$dirty && !_vm.$v.address.required
+                invalid:
+                  (_vm.$v.address.$dirty && !_vm.$v.address.required) ||
+                  (_vm.$v.address.$dirty && _vm.$v.address.uniqueValueInForm)
               },
               attrs: { type: "text", name: _vm.inputNames.address },
               domProps: { value: _vm.address },
@@ -57224,15 +57379,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************!*\
   !*** ./resources/js/components/ModalWindow.vue ***!
   \*************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ModalWindow_vue_vue_type_template_id_2ffcfd3c_class_table___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ModalWindow.vue?vue&type=template&id=2ffcfd3c&class=table& */ "./resources/js/components/ModalWindow.vue?vue&type=template&id=2ffcfd3c&class=table&");
 /* harmony import */ var _ModalWindow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ModalWindow.vue?vue&type=script&lang=js& */ "./resources/js/components/ModalWindow.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _ModalWindow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _ModalWindow_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _ModalWindow_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalWindow.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/ModalWindow.vue?vue&type=style&index=0&lang=css&");
+/* empty/unused harmony star reexport *//* harmony import */ var _ModalWindow_vue_vue_type_style_index_0_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ModalWindow.vue?vue&type=style&index=0&lang=css& */ "./resources/js/components/ModalWindow.vue?vue&type=style&index=0&lang=css&");
 /* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
@@ -57264,7 +57418,7 @@ component.options.__file = "resources/js/components/ModalWindow.vue"
 /*!**************************************************************************!*\
   !*** ./resources/js/components/ModalWindow.vue?vue&type=script&lang=js& ***!
   \**************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57312,15 +57466,14 @@ __webpack_require__.r(__webpack_exports__);
 /*!*************************************************************!*\
   !*** ./resources/js/components/form/CouriersFormErrors.vue ***!
   \*************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CouriersFormErrors_vue_vue_type_template_id_9cb406b6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CouriersFormErrors.vue?vue&type=template&id=9cb406b6& */ "./resources/js/components/form/CouriersFormErrors.vue?vue&type=template&id=9cb406b6&");
 /* harmony import */ var _CouriersFormErrors_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CouriersFormErrors.vue?vue&type=script&lang=js& */ "./resources/js/components/form/CouriersFormErrors.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _CouriersFormErrors_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _CouriersFormErrors_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -57350,7 +57503,7 @@ component.options.__file = "resources/js/components/form/CouriersFormErrors.vue"
 /*!**************************************************************************************!*\
   !*** ./resources/js/components/form/CouriersFormErrors.vue?vue&type=script&lang=js& ***!
   \**************************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CourierStoreRequest extends FormRequest
+class CourierStoreRequest extends ApiRequest
 {
     private $states =
         'AL,AK,AS,AZ,AR,CA,CO,CT,DE,DC,FM,FL,GA,GU,HI,ID,IL,IN,IA,KS,KY,LA,ME,MH,MD,MA,MI,MN,MS,MO,MT,NE,NV,NH,NJ,NM,NY,
@@ -38,4 +38,5 @@ class CourierStoreRequest extends FormRequest
             'couriers.*.phone_2' => 'nullable|regex:/^\d{3}-\d{3}-\d{4}$/',
         ];
     }
+
 }

@@ -8,8 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Courier extends Model
 {
     protected $fillable = [
-        'manager_id', 'name', 'email', 'payment_method',
-        'paypal_email', 'address', 'city', 'state', 'zip', 'phone_1', 'phone_2'
+        'manager_id',
+        'name',
+        'email',
+        'payment_method',
+        'paypal_email',
+        'address',
+        'city',
+        'state',
+        'zip',
+        'phone_1',
+        'phone_2'
     ];
 
     protected const PAYMENT_METHOD_PAYPAL = 0;
@@ -38,7 +47,8 @@ class Courier extends Model
                 $data[$key]['payment_method'] = self::PAYMENT_METHOD_PAYPAL;
             }
             return $data;
-        } throw new \Exception('Массив с данными курьеров пуст');
+        }
+        throw new \Exception('Массив с данными курьеров пуст');
     }
 
     public function manager()

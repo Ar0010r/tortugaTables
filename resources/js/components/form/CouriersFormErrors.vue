@@ -11,12 +11,20 @@
                    v-if="(v.email.$dirty && !v.email.required)">Введите имейл</label>
             <label class="error-msg form_input-email-error"
                    v-if="(v.email.$dirty && !v.email.email)">Введите правильный имейл</label>
+            <label class="error-msg form_input-email-error"
+                   v-if="(v.email.$dirty && v.email.uniqueValueInForm)">Курьер с таким имейлом уже есть в форме</label>
             <label class="error-msg form_input-paypal-error"
                    v-if="(v.paypal.$dirty && !v.paypal.email)">Введите правильный пейпал имейл</label>
+            <label class="error-msg form_input-paypal-error"
+                   v-if="(v.paypal.$dirty && !v.paypal.email)">Введите правильный пейпал имейл</label>
+            <label class="error-msg form_input-email-error"
+                   v-if="(v.paypal.$dirty && v.paypal.uniqueValueInForm)">Курьер с таким пейпал уже есть в форме</label>
         </div>
         <div class="errors-div_address errors-div">
             <label class="error-msg form_input-address-error"
                    v-if="(v.address.$dirty && !v.address.required)">Введите адрес</label>
+            <label class="error-msg form_input-email-error"
+                   v-if="(v.address.$dirty && v.address.uniqueValueInForm)">Курьер с таким адресом уже есть в форме</label>
             <label class="error-msg form_input-city-error"
                    v-if="(v.city.$dirty && !v.city.required)">Введите город</label>
             <label class="error-msg form_input-city-error"

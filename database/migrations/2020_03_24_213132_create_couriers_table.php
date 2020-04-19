@@ -17,10 +17,10 @@ class CreateCouriersTable extends Migration
             $table->id();
             $table->foreignId('manager_id');
             $table->string('name');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->smallInteger('payment_method')->default(0);
-            $table->string('paypal_email')->nullable();
-            $table->string('address');
+            $table->string('paypal_email')->nullable()->unique();
+            $table->string('address')->unique();
             $table->string('city');
             $table->string('state');
             $table->string('zip');

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\UniqueName;
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderStoreRequest extends FormRequest
+class OrderStoreRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +29,18 @@ class OrderStoreRequest extends FormRequest
             'orders.*.content' => 'required|string',
             'orders.*.quantity' => 'required|integer',
             'orders.*.price' => 'required|integer',
-            'orders.*.tracking_number' => 'required|integer',
+            'orders.*.tracking_number' => 'required',
             'orders.*.holder' => 'nullable|string',
             'orders.*.shop' => 'nullable|string'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'orders.*.name.required' => 'Введите имя' . PHP_EOL . ' ',
+            'orders.*.name.string' => 'В имени допустимы только буквы' . PHP_EOL . ' ',
+            'orders.*.name.exists' => 'Курьера с именем :input нет в базе данных' . PHP_EOL . ' ',
         ];
     }
 }

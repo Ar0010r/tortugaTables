@@ -71,10 +71,17 @@
                     .then((response) => {
                         console.log(response);
                         //this.$router.push({ name: '/success', title: 'test title' })
-                    }).catch(e => {
-                    that.errors = e;
-                    console.log(e);
-                    eventBus.$emit('showModal', e);
+                    }).catch(error => {
+
+                        let data = error.response.data;
+                        let errors = 'error';
+
+                        if (data.errors) {
+                             errors = Object.values(error.response.data.errors).join("\n");
+                        } else if (data) {
+                             errors = data;
+                        }
+                    eventBus.$emit('showModal', errors);
                 });
             },
         }

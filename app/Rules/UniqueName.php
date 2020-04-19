@@ -45,6 +45,6 @@ class UniqueName implements Rule
     public function message()
     {
         return 'Есть ' . $this->count . ' курьера с именем ' . $this->name .
-        ' пожалуйста удалите строку с этим заказом и добавьте его с админки';
+        ' пожалуйста удалите строку с этим заказом и добавьте его с админки' . PHP_EOL;
     }
 }

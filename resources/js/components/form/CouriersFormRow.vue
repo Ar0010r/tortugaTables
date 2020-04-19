@@ -10,17 +10,18 @@
                 <input type="text" class=" form_input form_input-email"
                        v-model="email"
                        :name="inputNames.email"
-                       :class="{invalid: ($v.email.$dirty && !$v.email.required || $v.email.$dirty && !$v.email.email)}">
+                       :class="{invalid: ($v.email.$dirty && !$v.email.required || $v.email.$dirty && !$v.email.email
+                       || $v.email.$dirty && $v.email.uniqueValueInForm)}">
 
                 <input type="text" class="form_input form_input-paypal"
                        v-model="paypal"
                        :name="inputNames.paypal"
-                       :class="{invalid: ($v.paypal.$dirty && !$v.paypal.email)}">
+                       :class="{invalid: ($v.paypal.$dirty && !$v.paypal.email || $v.paypal.$dirty && $v.paypal.uniqueValueInForm)}">
 
                 <input type="text" class="form_input form_input-address"
                        v-model="address"
                        :name="inputNames.address"
-                       :class="{invalid: ($v.address.$dirty && !$v.address.required)}">
+                       :class="{invalid: ($v.address.$dirty && !$v.address.required || $v.address.$dirty && $v.address.uniqueValueInForm)}">
 
                 <div class="form_table-div">
                     <input type="text" class="form_input form_input-city"
@@ -63,9 +64,13 @@
     export default {
         mounted() {
 
-            this.setComponentData();
-
+            this.formEmailsAndAddresses();
         },
+
+        created() {
+            this.setComponentData();
+        },
+
         props: ['dataRow', 'index'],
         components: {DeleteButton, CouriersFormErrors},
 
@@ -75,9 +80,17 @@
                     return /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/.test(name)
                 }
             },
-            email: {required, email},
-            paypal: {email},
-            address: {required},
+            email: {
+                required, email, uniqueValueInForm(email) {
+                    return this.formUniqueData.includes(email);
+                }
+            },
+            paypal: {email, uniqueValueInForm(paypal) {
+                    return this.formUniqueData.includes(paypal);
+                }},
+            address: {required, uniqueValueInForm(address) {
+                    return this.formUniqueData.includes(address);
+                }},
             city: {
                 required, validName(city) {
                     return /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/.test(city)
@@ -89,8 +102,8 @@
                 }
             },
             zip: {
-                required, validZip(state) {
-                    return /^\d{5}(-\d{4})?$/.test(state);
+                required, validZip(zip) {
+                    return /^\d{5}(-\d{4})?$/.test(zip);
                 }
             },
             tracking_number: {required},
@@ -136,6 +149,7 @@
                 zip: '',
                 phone_1: '',
                 phone_2: '',
+                formUniqueData: [],
 
                 states: [
                     "AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL",
@@ -166,10 +180,41 @@
                 this.state = this.dataRow[6];
                 this.zip = this.dataRow[7];
                 this.phone_1 = this.dataRow[8];
-                //this.phone_2 = this.dataRow[9] || this.dataRow[8];
                 this.phone_2 = this.dataRow[9] || "";
 
                 this.$v.$touch();
+            },
+
+            formEmailsAndAddresses: function () {
+
+                let emails = document.getElementsByClassName('form_input-email');
+
+                for (let item of emails) {
+                    this.formUniqueData.push(item.value);
+                }
+
+                let paypals = document.getElementsByClassName('form_input-paypal');
+
+                for (let item of paypals) {
+                    this.formUniqueData.push(item.value);
+                }
+
+                let addresses = document.getElementsByClassName('form_input-address');
+
+                for (let item of addresses) {
+                    this.formUniqueData.push(item.value);
+                }
+
+                this.removeFromArray(this.email);
+                this.removeFromArray(this.paypal);
+                this.removeFromArray(this.address);
+            },
+
+            removeFromArray: function (email) {
+                let index = this.formUniqueData.indexOf(email);
+                if (index > -1) {
+                    this.formUniqueData.splice(index, 1);
+                }
             }
         }
     }
