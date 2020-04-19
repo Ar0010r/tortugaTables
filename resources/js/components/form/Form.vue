@@ -28,11 +28,14 @@
             eventBus.$on('storeData', data => {
                 let invalid = document.getElementsByClassName('invalid').length;
                 if(invalid > 0){
-                    console.log('invalid');
                     return
                 }
                 this.storeData(data);
             });
+        },
+
+        beforeDestroy () {
+            eventBus.$off('storeData')
         },
 
         data: function () {
@@ -69,8 +72,10 @@
             storeData(apiRoute) {
                 axios.post(apiRoute, $('#form').serialize())
                     .then((response) => {
-                        console.log(response);
-                        //this.$router.push({ name: '/success', title: 'test title' })
+                        this.$router.go(-1);
+
+                        eventBus.$emit('showModal', 'данные успешно добавлены. ' +
+                            'вы будете перенаправлены на главную страницу');
                     }).catch(error => {
 
                         let data = error.response.data;

@@ -1993,7 +1993,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2461,12 +2460,14 @@ __webpack_require__.r(__webpack_exports__);
       var invalid = document.getElementsByClassName('invalid').length;
 
       if (invalid > 0) {
-        console.log('invalid');
         return;
       }
 
       _this.storeData(data);
     });
+  },
+  beforeDestroy: function beforeDestroy() {
+    _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$off('storeData');
   },
   data: function data() {
     return {
@@ -2499,8 +2500,12 @@ __webpack_require__.r(__webpack_exports__);
       this.googleTableData.splice(index, 1);
     },
     storeData: function storeData(apiRoute) {
+      var _this3 = this;
+
       axios.post(apiRoute, $('#form').serialize()).then(function (response) {
-        console.log(response); //this.$router.push({ name: '/success', title: 'test title' })
+        _this3.$router.go(-1);
+
+        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', 'данные успешно добавлены. ' + 'вы будете перенаправлены на главную страницу');
       })["catch"](function (error) {
         var data = error.response.data;
         var errors = 'error';
@@ -7445,7 +7450,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    height: -webkit-fit-content;\n    height: -moz-fit-content;\n    height: fit-content;\n    max-width: 30%;\n}\n.success-message {\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n", ""]);
+exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    height: -webkit-fit-content;\n    height: -moz-fit-content;\n    height: fit-content;\n    max-width: 30%;\n}\n.success-message {\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n.success-message_text {\n    white-space: pre;\n}\n", ""]);
 
 // exports
 
@@ -39959,7 +39964,7 @@ var render = function() {
           on: {
             click: function($event) {
               $event.preventDefault()
-              return _vm.navButtonFunction()
+              return _vm.navButtonFunction($event)
             }
           }
         },

@@ -38,9 +38,9 @@ class OrderStoreRequest extends ApiRequest
     public function messages()
     {
         return [
-            'orders.*.name.required' => 'Введите имя' . PHP_EOL . ' ',
-            'orders.*.name.string' => 'В имени допустимы только буквы' . PHP_EOL . ' ',
-            'orders.*.name.exists' => 'Курьера с именем :input нет в базе данных' . PHP_EOL . ' ',
+            'orders.*.name.required' => 'Введите имя' . PHP_EOL,
+            'orders.*.name.string' => 'В имени допустимы только буквы' . PHP_EOL,
+            'orders.*.name.exists' => 'Курьера с именем :input нет в базе данных' . PHP_EOL,
         ];
     }
 }

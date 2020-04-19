@@ -1,7 +1,7 @@
 <template>
         <div id="container" class="button-wrapp">
             <div class="button" id="navButton"
-                         @click.prevent="navButtonFunction()"
+                         @click.prevent="navButtonFunction"
                          >{{navButtonText}}
             </div>
         </div>

@@ -10,7 +10,6 @@
                 <div class="success-message_text">
                     {{message}}
                 </div>
-
                 <div class="sucess-message_img-wrap">
                     <img  class="success-message-img" src="/images/success.png">
                 </div>
@@ -71,6 +70,7 @@
         background-color: white;
         min-height: 130px;
         z-index: 100;
+
     }
 
     .success-message_wrap {
@@ -86,5 +86,9 @@
     .sucess-message_img-wrap {
         min-width: 50px;
         min-height: 25px;
+    }
+
+    .success-message_text {
+        white-space: pre;
     }
 </style>
