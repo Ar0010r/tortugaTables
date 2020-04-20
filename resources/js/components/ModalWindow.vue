@@ -6,13 +6,11 @@
 
     <transition name="modal" appear>
         <div class="modal success-message_wrap" v-if="show">
-            <div class="success-message">
-                <div class="success-message_text">
-                    {{message}}
-                </div>
-                <div class="sucess-message_img-wrap">
+            <div class="success-message" v-for="(message, index) in messages">
+                <p class="success-message_text">{{message.join()}}</p>
+                <!--<div class="sucess-message_img-wrap">
                     <img  class="success-message-img" src="/images/success.png">
-                </div>
+                </div>-->
             </div>
         </div>
     </transition>
@@ -25,9 +23,7 @@
         mounted() {
             console.log('Component ModalWindow mounted.');
             eventBus.$on('showModal', data => {
-                this.message = data || "";
-                document.getElementsByClassName('success-message_text').textContent = this.message;
-                console.log(this.message);
+                this.messages = data || "";
                 this.showModal();
             });
         },
@@ -43,7 +39,7 @@
         },
         data: () => ({
             show: false,
-            message: ""
+            messages: ""
         }),
     }
 </script>
@@ -74,13 +70,21 @@
     }
 
     .success-message_wrap {
-        height: fit-content;
+        padding: 30px;
+        min-height: fit-content;
         max-width: 30%;
+
+        background-color: #C4E0FF;
+
     }
 
     .success-message {
+
+        padding: 0;
+
         height: 100%;
         width: 100%;
+
     }
 
     .sucess-message_img-wrap {
@@ -89,6 +93,6 @@
     }
 
     .success-message_text {
-        white-space: pre;
+
     }
 </style>

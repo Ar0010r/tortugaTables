@@ -5,7 +5,7 @@
                        v-for="(dataRow, index) in googleTableData"
                        :dataRow = "dataRow"
                        :index="index"
-                       :key="index"></component>
+                       :key="dataRow.name + index"></component>
         </form>
     </div>
 </template>
@@ -22,7 +22,7 @@
             this.readData();
 
             eventBus.$on('deleteRow', data => {
-                this.deleteRow(data);
+                this.deleteRow(data)
             });
 
             eventBus.$on('storeData', data => {
@@ -40,7 +40,7 @@
 
         data: function () {
             return {
-                googleTableData: "",
+                googleTableData : "",
                 currentFormRow: "",
                 formRows: {
                     'orders-form' : 'OrdersFormRow',
@@ -60,7 +60,6 @@
                     this.googleTableData = Object.values(response.data);
                 }).catch(error => {
                     this.$router.go(-1);
-                    console.log(error.response);
                     eventBus.$emit('showModal', error.response.data);
                 });
             },
@@ -73,8 +72,7 @@
                 axios.post(apiRoute, $('#form').serialize())
                     .then((response) => {
                         this.$router.go(-1);
-
-                        eventBus.$emit('showModal', 'данные успешно добавлены. ' +
+                        eventBus.$emit('showModal', 'Данные успешно добавлены. ' +
                             'вы будете перенаправлены на главную страницу');
                     }).catch(error => {
 
@@ -82,7 +80,8 @@
                         let errors = 'error';
 
                         if (data.errors) {
-                             errors = Object.values(error.response.data.errors).join("\n");
+                             //errors = Object.values(error.response.data.errors).join("\n");
+                             errors = error.response.data.errors;
                         } else if (data) {
                              errors = data;
                         }

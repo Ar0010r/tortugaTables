@@ -26,21 +26,30 @@ class OrderStoreRequest extends ApiRequest
     {
         return [
             'orders.*.name' => ['required', 'string', 'exists:couriers,name', new UniqueName()],
-            'orders.*.content' => 'required|string',
+            'orders.*.content' => 'required',
             'orders.*.quantity' => 'required|integer',
             'orders.*.price' => 'required|integer',
-            'orders.*.tracking_number' => 'required',
             'orders.*.holder' => 'nullable|string',
-            'orders.*.shop' => 'nullable|string'
         ];
     }
 
+    /**
+     * Get the validation error messages that apply to the request.
+     *
+     * @return array
+     */
     public function messages()
     {
         return [
-            'orders.*.name.required' => 'Введите имя' . PHP_EOL,
-            'orders.*.name.string' => 'В имени допустимы только буквы' . PHP_EOL,
-            'orders.*.name.exists' => 'Курьера с именем :input нет в базе данных' . PHP_EOL,
+            'orders.*.name.required' => 'Введите имя',
+            'orders.*.name.string' => 'В имени допустимы только буквы',
+            'orders.*.name.exists' => 'Курьера с именем :input нет в базе данных',
+            'orders.*.content.required' => 'Введите содержимое',
+            'orders.*.quantity.required' => 'Введите количество',
+            'orders.*.quantity.integer' => 'Количество должно быть целым числом',
+            'orders.*.price.required' => 'Введите цену',
+            'orders.*.price.integer' => 'Цена должна быть целым числом',
+            'orders.*.holder.string' => 'В имени холдера допустимы только буквы',
         ];
     }
 }

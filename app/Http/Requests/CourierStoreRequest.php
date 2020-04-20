@@ -39,4 +39,34 @@ class CourierStoreRequest extends ApiRequest
         ];
     }
 
+    /**
+     * Get the validation error messages that apply to the request.
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'couriers.*.name.required' => 'Введите имя',
+            'couriers.*.name.string' => 'Имя не должно содержать ничего кроме букв',
+            'couriers.*.email.required' => 'Введите имейл',
+            'couriers.*.email.email' => 'Введите валидный имейл',
+            'couriers.*.email.unique' => 'Курьер с имейлом :input уже есть в базе данных ' .
+                'удалите его из формы, нажав на крестик',
+            'couriers.*.paypal_email.email' => 'Введите валидный пейпал имейл',
+            'couriers.*.paypal_email.unique' => 'Курьер с имейлом :input уже есть в базе данных ' .
+                'удалите его из формы, нажав на крестик',
+            'couriers.*.city.required' => 'Введите город',
+            'couriers.*.city.string' => 'В имени города не должно быть ничего кроме букв',
+            'couriers.*.state.required' => 'Введите штат',
+            'couriers.*.state.string' => 'В имени штата не должно быть ничего кроме букв',
+            'couriers.*.state.in' => 'Введите штат в двухбуквенном формате',
+            'couriers.*.zip.required' => 'Введите зип код',
+            'couriers.*.zip.regex' => 'ВВедите валидный зип код',
+            'couriers.*.phone_1.required' => 'Введите телефон',
+            'couriers.*.phone_1.regex' => 'Введите телефон в формате ххх-ххх-хххх',
+            'couriers.*.phone_2.required' => 'Введите телефон',
+            'couriers.*.phone_2.regex' => 'Введите телефон в формате ххх-ххх-хххх',
+        ];
+    }
+
 }

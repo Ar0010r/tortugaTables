@@ -1991,8 +1991,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2000,9 +1998,7 @@ __webpack_require__.r(__webpack_exports__);
 
     console.log('Component ModalWindow mounted.');
     _app__WEBPACK_IMPORTED_MODULE_0__["eventBus"].$on('showModal', function (data) {
-      _this.message = data || "";
-      document.getElementsByClassName('success-message_text').textContent = _this.message;
-      console.log(_this.message);
+      _this.messages = data || "";
 
       _this.showModal();
     });
@@ -2020,7 +2016,7 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       show: false,
-      message: ""
+      messages: ""
     };
   }
 });
@@ -2492,7 +2488,6 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this2.$router.go(-1);
 
-        console.log(error.response);
         _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', error.response.data);
       });
     },
@@ -2505,13 +2500,14 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(apiRoute, $('#form').serialize()).then(function (response) {
         _this3.$router.go(-1);
 
-        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', 'данные успешно добавлены. ' + 'вы будете перенаправлены на главную страницу');
+        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', 'Данные успешно добавлены. ' + 'вы будете перенаправлены на главную страницу');
       })["catch"](function (error) {
         var data = error.response.data;
         var errors = 'error';
 
         if (data.errors) {
-          errors = Object.values(error.response.data.errors).join("\n");
+          //errors = Object.values(error.response.data.errors).join("\n");
+          errors = error.response.data.errors;
         } else if (data) {
           errors = data;
         }
@@ -7450,7 +7446,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    height: -webkit-fit-content;\n    height: -moz-fit-content;\n    height: fit-content;\n    max-width: 30%;\n}\n.success-message {\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n.success-message_text {\n    white-space: pre;\n}\n", ""]);
+exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    padding: 30px;\n    min-height: -webkit-fit-content;\n    min-height: -moz-fit-content;\n    min-height: fit-content;\n    max-width: 30%;\n\n    background-color: #C4E0FF;\n}\n.success-message {\n\n    padding: 0;\n\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n.success-message_text {\n}\n", ""]);
 
 // exports
 
@@ -39012,24 +39008,18 @@ var render = function() {
       _vm._v(" "),
       _c("transition", { attrs: { name: "modal", appear: "" } }, [
         _vm.show
-          ? _c("div", { staticClass: "modal success-message_wrap" }, [
-              _c("div", { staticClass: "success-message" }, [
-                _c("div", { staticClass: "success-message_text" }, [
-                  _vm._v(
-                    "\n                    " +
-                      _vm._s(_vm.message) +
-                      "\n                "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "sucess-message_img-wrap" }, [
-                  _c("img", {
-                    staticClass: "success-message-img",
-                    attrs: { src: "/images/success.png" }
-                  })
+          ? _c(
+              "div",
+              { staticClass: "modal success-message_wrap" },
+              _vm._l(_vm.messages, function(message, index) {
+                return _c("div", { staticClass: "success-message" }, [
+                  _c("p", { staticClass: "success-message_text" }, [
+                    _vm._v(_vm._s(message.join()))
+                  ])
                 ])
-              ])
-            ])
+              }),
+              0
+            )
           : _vm._e()
       ])
     ],
@@ -39502,7 +39492,7 @@ var render = function() {
         on: {
           click: function($event) {
             $event.preventDefault()
-            return _vm.deleteRow()
+            return _vm.deleteRow($event)
           }
         }
       },
@@ -39542,7 +39532,7 @@ var render = function() {
       { staticClass: "form_table", attrs: { id: "form" } },
       _vm._l(_vm.googleTableData, function(dataRow, index) {
         return _c(_vm.currentFormRow, {
-          key: index,
+          key: dataRow.name + index,
           tag: "component",
           attrs: { dataRow: dataRow, index: index }
         })

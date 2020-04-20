@@ -1,6 +1,6 @@
 <template>
     <div class="button-wrapper">
-        <div class="close-container" @click.prevent="deleteRow()">
+        <div class="close-container" @click.prevent="deleteRow">
             <div class="leftright"></div>
             <div class="rightleft"></div>
         </div>
