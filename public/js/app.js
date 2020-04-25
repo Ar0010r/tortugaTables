@@ -2438,6 +2438,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2448,7 +2449,7 @@ __webpack_require__.r(__webpack_exports__);
     console.log('componenent form mounted');
     _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('changePage');
     this.currentFormRow = this.formRows[this.$route.name];
-    this.readData();
+    this.readDataFromGoogleTable();
     _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$on('deleteRow', function (data) {
       _this.deleteRow(data);
     });
@@ -2480,7 +2481,7 @@ __webpack_require__.r(__webpack_exports__);
     OrdersFormRow: _OrdersFormRow__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   methods: {
-    readData: function readData() {
+    readDataFromGoogleTable: function readDataFromGoogleTable() {
       var _this2 = this;
 
       axios.get('/api/table/read').then(function (response) {
@@ -2500,13 +2501,12 @@ __webpack_require__.r(__webpack_exports__);
       axios.post(apiRoute, $('#form').serialize()).then(function (response) {
         _this3.$router.go(-1);
 
-        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', 'Данные успешно добавлены. ' + 'вы будете перенаправлены на главную страницу');
+        _app__WEBPACK_IMPORTED_MODULE_2__["eventBus"].$emit('showModal', 'Данные успешно добавлены, ' + 'вы будете перенаправлены на главную страницу');
       })["catch"](function (error) {
         var data = error.response.data;
-        var errors = 'error';
+        var errors = '';
 
         if (data.errors) {
-          //errors = Object.values(error.response.data.errors).join("\n");
           errors = error.response.data.errors;
         } else if (data) {
           errors = data;
@@ -7446,7 +7446,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    padding: 30px;\n    min-height: -webkit-fit-content;\n    min-height: -moz-fit-content;\n    min-height: fit-content;\n    max-width: 30%;\n\n    background-color: #C4E0FF;\n}\n.success-message {\n\n    padding: 0;\n\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n.success-message_text {\n}\n", ""]);
+exports.push([module.i, "\n.modal-overlay {\n    position: absolute;\n    left: 0;\n    right: 0;\n    top: 0;\n    bottom: 0;\n    z-index: 98;\n    min-height: 100vh;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(0, 0, 0, 0.7);\n}\n.modal {\n    position: fixed;\n    top: 20%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    background-color: white;\n    min-height: 130px;\n    z-index: 100;\n}\n.success-message_wrap {\n    padding: 30px;\n    min-height: -webkit-fit-content;\n    min-height: -moz-fit-content;\n    min-height: fit-content;\n    max-width: 30%;\n\n    background-color: #C4E0FF;\n}\n.success-message {\n\n    padding: 0;\n    align-items: flex-start;\n\n    height: 100%;\n    width: 100%;\n}\n.sucess-message_img-wrap {\n    min-width: 50px;\n    min-height: 25px;\n}\n.success-message_text {\n\n    padding: 5px;\n}\n.success-message_head {\n    align-self: flex-end;\n    margin: 0;\n}\n.modal hr {\n    color: black;\n    width: 100%;\n    border-top: 1px solid black;\n}\n.fade-enter-active,\n.fade-leave-active {\n    transition: opacity .7s;\n}\n.fade-enter,\n.fade-leave-to {\n    opacity: 0;\n}\n.slide-enter-active,\n.slide-leave-active {\n    transition: transform .7s;\n}\n.slide-enter,\n.slide-leave-to {\n    transform: translateY(-50%) translateX(100vw);\n}\n", ""]);
 
 // exports
 
@@ -39006,20 +39006,34 @@ var render = function() {
           : _vm._e()
       ]),
       _vm._v(" "),
-      _c("transition", { attrs: { name: "modal", appear: "" } }, [
+      _c("transition", { attrs: { name: "slide", appear: "" } }, [
         _vm.show
-          ? _c(
-              "div",
-              { staticClass: "modal success-message_wrap" },
-              _vm._l(_vm.messages, function(message, index) {
-                return _c("div", { staticClass: "success-message" }, [
-                  _c("p", { staticClass: "success-message_text" }, [
-                    _vm._v(_vm._s(message.join()))
-                  ])
-                ])
-              }),
-              0
-            )
+          ? _c("div", { staticClass: "modal success-message_wrap" }, [
+              _c("h3", { staticClass: "success-message_head" }, [
+                _vm._v("СООБЩЕНИЕ")
+              ]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "success-message" },
+                [
+                  typeof _vm.messages === "string"
+                    ? _c("p", { staticClass: "success-message_text" }, [
+                        _vm._v(_vm._s("- " + _vm.messages))
+                      ])
+                    : _vm._l(_vm.messages, function(message, index) {
+                        return _c(
+                          "p",
+                          { staticClass: "success-message_text" },
+                          [_vm._v(_vm._s("- " + message))]
+                        )
+                      })
+                ],
+                2
+              )
+            ])
           : _vm._e()
       ])
     ],

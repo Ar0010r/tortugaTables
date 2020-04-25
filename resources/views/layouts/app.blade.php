@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="/css/styles.css">
 
 
-        <title>Laravel</title>
+        <title>Tortuga Tables</title>
 
     </head>
     <body>

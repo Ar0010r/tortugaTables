@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 Route::group(['middleware' => 'web'], function () {
 
+    //роутинг для логина/регистриции
     Auth::routes();
 
-    Route::get('api/table/couriers', 'GoogleTableController@showTable');
-    Route::get('api/table/orders', 'GoogleTableController@showTable');
+    //роутинг для обращения к апи
+    Route::get('api/table/couriers', 'GoogleTableController@showWorkSheet');
+    Route::get('api/table/orders', 'GoogleTableController@showWorkSheet');
     Route::get('api/table/read', 'GoogleTableController@readData');
     Route::post('api/couriers/store', 'AppController@storeCouriers');
     Route::post('api/orders/store', 'AppController@storeOrders');
 
+    //роутинг для всех страниц сайта (кроме логина и регистрации). Здесь управление перехватывает Vue JS
     Route::get('{vue_capture?}', 'AppController@index')->where('vue_capture', '^(?!storage).*$')->middleware('auth');
-
 });

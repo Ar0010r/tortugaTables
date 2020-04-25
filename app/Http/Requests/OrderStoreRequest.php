@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Rules\UniqueName;
-use Illuminate\Foundation\Http\FormRequest;
 
 class OrderStoreRequest extends ApiRequest
 {

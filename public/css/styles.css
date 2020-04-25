@@ -395,8 +395,9 @@ ul, li, a {
   align-self: center;
   justify-self: center;
   display: grid;
-  grid-template-columns: 0.5fr 1fr;
+  grid-template-columns: 0.5fr 1.5fr;
   grid-template-rows: auto;
+  column-gap: 10px;
   row-gap: 5px;
 }
 
@@ -474,7 +475,7 @@ ul, li, a {
 }
 
 .success-message {
-  /*background-color: rgba(69, 97, 135, 0.1);*/
+  background-color: rgba(69, 97, 135, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;

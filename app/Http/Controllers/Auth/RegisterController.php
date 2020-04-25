@@ -30,7 +30,6 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    //protected $redirectTo = RouteServiceProvider::HOME;
     protected $redirectTo = '/table/couriers';
 
     /**
@@ -52,7 +51,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'login' => ['required', 'string', 'max:255'],
+            'login' => ['required', 'string', 'max:255' , 'unique:managers,login'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }

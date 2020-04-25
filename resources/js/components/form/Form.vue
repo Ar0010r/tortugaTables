@@ -5,7 +5,8 @@
                        v-for="(dataRow, index) in googleTableData"
                        :dataRow = "dataRow"
                        :index="index"
-                       :key="dataRow.name + index"></component>
+                       :key="dataRow.name + index">
+            </component>
         </form>
     </div>
 </template>
@@ -19,7 +20,7 @@
             console.log('componenent form mounted');
             eventBus.$emit('changePage');
             this.currentFormRow = this.formRows[this.$route.name];
-            this.readData();
+            this.readDataFromGoogleTable();
 
             eventBus.$on('deleteRow', data => {
                 this.deleteRow(data)
@@ -55,7 +56,7 @@
         },
 
         methods: {
-            readData: function () {
+            readDataFromGoogleTable: function () {
                 axios.get('/api/table/read').then((response) => {
                     this.googleTableData = Object.values(response.data);
                 }).catch(error => {
@@ -72,15 +73,14 @@
                 axios.post(apiRoute, $('#form').serialize())
                     .then((response) => {
                         this.$router.go(-1);
-                        eventBus.$emit('showModal', 'Данные успешно добавлены. ' +
-                            'вы будете перенаправлены на главную страницу');
+                        eventBus.$emit('showModal', 'Данные успешно добавлены, ' +
+                        'вы будете перенаправлены на главную страницу');
                     }).catch(error => {
 
                         let data = error.response.data;
-                        let errors = 'error';
+                        let errors = '';
 
                         if (data.errors) {
-                             //errors = Object.values(error.response.data.errors).join("\n");
                              errors = error.response.data.errors;
                         } else if (data) {
                              errors = data;

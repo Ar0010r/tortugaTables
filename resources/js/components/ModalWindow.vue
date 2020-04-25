@@ -4,13 +4,13 @@
         <div class="modal-overlay" v-if="show" @click="showModal"></div>
     </transition>
 
-    <transition name="modal" appear>
+    <transition name="slide" appear>
         <div class="modal success-message_wrap" v-if="show">
-            <div class="success-message" v-for="(message, index) in messages">
-                <p class="success-message_text">{{message.join()}}</p>
-                <!--<div class="sucess-message_img-wrap">
-                    <img  class="success-message-img" src="/images/success.png">
-                </div>-->
+            <h3 class = "success-message_head">СООБЩЕНИЕ</h3>
+            <hr>
+            <div class="success-message">
+                <p class="success-message_text" v-if="(typeof messages === 'string')">{{"- " + messages}}</p>
+                <p class="success-message_text" v-else v-for="(message, index) in messages">{{"- " + message}}</p>
             </div>
         </div>
     </transition>
@@ -81,6 +81,7 @@
     .success-message {
 
         padding: 0;
+        align-items: flex-start;
 
         height: 100%;
         width: 100%;
@@ -94,5 +95,38 @@
 
     .success-message_text {
 
+        padding: 5px;
+
+    }
+
+    .success-message_head {
+        align-self: flex-end;
+        margin: 0;
+    }
+
+    .modal hr {
+        color: black;
+        width: 100%;
+        border-top: 1px solid black;
+    }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity .7s;
+    }
+
+    .fade-enter,
+    .fade-leave-to {
+        opacity: 0;
+    }
+
+    .slide-enter-active,
+    .slide-leave-active {
+        transition: transform .7s;
+    }
+
+    .slide-enter,
+    .slide-leave-to {
+        transform: translateY(-50%) translateX(100vw);
     }
 </style>
